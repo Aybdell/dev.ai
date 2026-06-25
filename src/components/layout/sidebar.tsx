@@ -97,7 +97,7 @@ export function MobileHeader() {
   return (
     <header className="lg:hidden flex items-center justify-between px-4 h-14 border-b border-border bg-surface">
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="text-foreground">
             <Menu className="size-5" />
           </Button>
