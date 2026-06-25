@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { GitBranch } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -31,18 +30,6 @@ export default function LoginPage() {
     router.push('/dashboard')
   }
 
-  async function handleGithubLogin() {
-    setLoading(true)
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    })
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-    }
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Card className="w-full max-w-sm bg-surface border-border">
@@ -51,25 +38,6 @@ export default function LoginPage() {
           <p className="text-sm text-muted-foreground mt-1">AI-powered code reviews for developers</p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button
-            variant="outline"
-            className="w-full border-border text-muted-foreground hover:text-foreground hover:bg-subtle"
-            onClick={handleGithubLogin}
-            disabled={loading}
-          >
-            <GitBranch className="size-4 mr-2" />
-            Continue with GitHub
-          </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-surface px-2 text-muted-text">or</span>
-            </div>
-          </div>
-
           <form onSubmit={handleEmailLogin} className="space-y-3">
             <div>
               <label htmlFor="email" className="text-xs text-muted-foreground block mb-1">Email</label>
