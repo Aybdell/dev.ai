@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   FileCode,
   History,
@@ -26,6 +26,7 @@ const navItems = [
 
 function SidebarContent() {
   const pathname = usePathname()
+  const router = useRouter()
   const { user, signOut } = useAuth()
 
   return (
@@ -69,7 +70,7 @@ function SidebarContent() {
           <p className="text-xs text-muted-foreground truncate">{user?.email ?? ''}</p>
         </div>
         <button
-          onClick={signOut}
+          onClick={async () => { await signOut(); router.push('/') }}
           className="text-muted-text hover:text-foreground transition-colors"
           title="Sign out"
         >
