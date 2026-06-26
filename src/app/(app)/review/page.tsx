@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { CodeEditor } from '@/components/editor/code-editor'
 import { LanguageSelector } from '@/components/editor/language-selector'
 import { ResultsPanel } from '@/components/review/results-panel'
@@ -16,7 +16,14 @@ export default function ReviewPage() {
   const [analyzing, setAnalyzing] = useState(false)
   const [review, setReview] = useState<Review | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = useRef(createClient()).current
+  const resultsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (review && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [review])
 
   const charCount = code.length
   const lineCount = code === '' ? 0 : code.split('\n').length
@@ -68,7 +75,7 @@ export default function ReviewPage() {
     } finally {
       setAnalyzing(false)
     }
-  }, [code, language, charCount, supabase])
+  }, [code, language, charCount])
 
   return (
     <div className="h-full flex flex-col lg:flex-row">
@@ -131,7 +138,7 @@ export default function ReviewPage() {
         )}
 
         {review && !analyzing && (
-          <div className="p-6">
+          <div ref={resultsRef} className="p-6">
             <ResultsPanel review={review} />
           </div>
         )}

@@ -32,8 +32,6 @@ export function ResultsPanel({ review }: ResultsPanelProps) {
     clean_code: review.clean_code,
   }
 
-  const currentIssues = issueMap[activeTab] ?? []
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-4 pt-4">
@@ -55,17 +53,20 @@ export function ResultsPanel({ review }: ResultsPanelProps) {
               </TabsTrigger>
             ))}
           </TabsList>
-          {tabs.map((tab) => (
-            <TabsContent key={tab.value} value={tab.value} className="mt-3 space-y-2">
-              {currentIssues.length === 0 ? (
-                <p className="text-xs text-muted-text py-4 text-center">No {tab.label.toLowerCase()} issues found.</p>
-              ) : (
-                currentIssues.map((issue, i) => (
-                  <IssueCard key={i} issue={issue} />
-                ))
-              )}
-            </TabsContent>
-          ))}
+          {tabs.map((tab) => {
+            const issues = issueMap[tab.value] ?? []
+            return (
+              <TabsContent key={tab.value} value={tab.value} className="mt-3 space-y-2">
+                {issues.length === 0 ? (
+                  <p className="text-xs text-muted-text py-4 text-center">No {tab.label.toLowerCase()} issues found.</p>
+                ) : (
+                  issues.map((issue, i) => (
+                    <IssueCard key={i} issue={issue} />
+                  ))
+                )}
+              </TabsContent>
+            )
+          })}
         </Tabs>
       </div>
 

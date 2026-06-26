@@ -24,7 +24,7 @@ export function CodeEditor({ value, onChange, language }: CodeEditorProps) {
 
   return (
     <MonacoEditor
-      height="calc(100vh - 220px)"
+      height="100%"
       language={monacoLang}
       value={value}
       onChange={(v) => onChange(v ?? '')}
@@ -41,7 +41,7 @@ export function CodeEditor({ value, onChange, language }: CodeEditorProps) {
         automaticLayout: true,
       }}
       loading={
-        <div className="h-[400px] flex items-center justify-center text-muted-text text-sm">
+        <div className="h-full flex items-center justify-center text-muted-text text-sm">
           Loading editor...
         </div>
       }
