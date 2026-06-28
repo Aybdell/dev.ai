@@ -3,6 +3,7 @@ import { Navbar } from '@/components/landing/navbar'
 import { Hero } from '@/components/landing/hero'
 import { DemoPreview } from '@/components/landing/demo-preview'
 import { Features } from '@/components/landing/features'
+import { Testimonials } from '@/components/landing/testimonials'
 import { HowItWorks } from '@/components/landing/how-it-works'
 import { Pricing } from '@/components/landing/pricing'
 import { CTA } from '@/components/landing/cta'
@@ -26,6 +27,7 @@ export default function LandingPage() {
       <Hero />
       <DemoPreview />
       <Features />
+      <Testimonials />
       <HowItWorks />
       <Pricing />
       <CTA />

@@ -3,11 +3,13 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { Review } from '@/types/review'
+import { BarChart2 } from 'lucide-react'
 import { ScoreChart } from '@/components/stats/score-chart'
 import { LanguagePie } from '@/components/stats/language-pie'
 import { IssueBarChart } from '@/components/stats/issue-bar-chart'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
 interface StatsData {
@@ -89,7 +91,7 @@ export default function StatsPage() {
     }
 
     loadStats()
-  }, [])
+  }, [supabase])
 
   if (loading) {
     return (
@@ -106,6 +108,21 @@ export default function StatsPage() {
   }
 
   if (!stats) return null
+
+  if (stats.totalReviews === 0) {
+    return (
+      <div className="p-6 max-w-5xl mx-auto">
+        <h1 className="text-lg font-semibold text-foreground mb-6">Stats</h1>
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <BarChart2 className="size-12 text-muted-text mb-4" />
+          <p className="text-sm text-muted-foreground mb-4">Analyze your first snippet</p>
+          <a href="/review">
+            <Button variant="default">Analyze Code</Button>
+          </a>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">

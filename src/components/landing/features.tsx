@@ -9,6 +9,9 @@ const features = [
     icon: Bug,
     title: 'Bug Detection',
     desc: 'Catch logic errors, null references, and async mistakes before they reach production.',
+    codeSnippet: `const user = await getUser(id)
+// ❌ null reference
+console.log(user.name)`,
   },
   {
     icon: Zap,
@@ -29,6 +32,10 @@ const features = [
     icon: Code,
     title: 'Refactored Code',
     desc: 'Receive a fully rewritten version of your code that follows modern patterns and standards.',
+    codeSnippet: `// Before: nested callbacks
+fetchData(id, (err, res) => { ... })
+// After: async/await
+const data = await fetchData(id)`,
   },
   {
     icon: MessageCircle,
@@ -65,7 +72,7 @@ export function Features() {
               <div
                 key={feature.title}
                 className={cn(
-                  'bg-surface border border-border rounded-xl p-6 hover:border-strong transition-all duration-200',
+                  'bg-surface border border-border rounded-xl p-6 hover:border-[#7c3aed]/40 transition-all duration-200',
                   inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                 )}
                 style={{ transitionDelay: `${i * 100}ms` }}
@@ -75,6 +82,13 @@ export function Features() {
                 </div>
                 <h3 className="text-[15px] font-semibold text-foreground mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
+                {'codeSnippet' in feature && feature.codeSnippet && (
+                  <pre className="mt-4 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg p-3 overflow-x-auto">
+                    <code className="text-[11px] font-mono text-[#888888] leading-relaxed whitespace-pre">
+                      {feature.codeSnippet}
+                    </code>
+                  </pre>
+                )}
               </div>
             )
           })}

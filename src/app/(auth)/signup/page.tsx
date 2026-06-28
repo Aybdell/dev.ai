@@ -46,7 +46,7 @@ export default function SignupPage() {
         <ArrowLeft className="size-4" />
         Back to home
       </Link>
-      <Card className="w-full max-w-sm bg-surface border-border">
+      <Card className="w-full max-w-sm bg-surface border-border animate-fade-in-up">
         <CardHeader className="pb-4 pt-8 text-center">
           <h1 className="font-sans font-bold text-2xl text-foreground">Dev AI</h1>
           <p className="text-sm text-muted-foreground mt-1">AI-powered code reviews for developers</p>

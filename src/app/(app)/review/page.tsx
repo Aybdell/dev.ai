@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { CodeEditor } from '@/components/editor/code-editor'
 import { LanguageSelector } from '@/components/editor/language-selector'
 import { ResultsPanel } from '@/components/review/results-panel'
+import { AnalysisPipeline } from '@/components/review/analysis-pipeline'
 import { Button } from '@/components/ui/button'
 import { Loader2, Sparkles } from 'lucide-react'
 import type { Language, Review } from '@/types/review'
@@ -26,7 +27,6 @@ export default function ReviewPage() {
   }, [review])
 
   const charCount = code.length
-  const lineCount = code === '' ? 0 : code.split('\n').length
 
   const handleAnalyze = useCallback(async () => {
     if (!code.trim()) {
@@ -67,26 +67,21 @@ export default function ReviewPage() {
 
       const data = await response.json()
       setReview(data.review)
-      toast.success('Review complete!')
+      toast.success('Review saved')
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred'
       setError(message)
-      toast.error(message)
+      toast.error('Analysis failed')
     } finally {
       setAnalyzing(false)
     }
-  }, [code, language, charCount])
+  }, [code, language, charCount, supabase.auth])
 
   return (
     <div className="h-full flex flex-col lg:flex-row">
       <div className="flex-1 flex flex-col border-r border-border lg:max-w-[50%]">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <LanguageSelector value={language} onChange={setLanguage} />
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] text-muted-text font-mono">
-              {lineCount} lines | {charCount} chars
-            </span>
-          </div>
         </div>
 
         <div className="flex-1 flex flex-col min-h-0">
@@ -113,15 +108,8 @@ export default function ReviewPage() {
 
       <div className="flex-1 overflow-y-auto lg:max-w-[50%]">
         {analyzing && (
-          <div className="flex items-center justify-center h-full py-32">
-            <div className="flex flex-col items-center gap-3">
-              <div className="flex gap-1">
-                <span className="size-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="size-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="size-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-              <p className="text-sm text-muted-text">Dev AI is analyzing your code...</p>
-            </div>
+          <div className="flex items-center justify-center h-full">
+            <AnalysisPipeline />
           </div>
         )}
 

@@ -6,7 +6,7 @@ import { ReviewDetailDialog } from '@/components/dashboard/review-detail-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Trash2, Eye } from 'lucide-react'
+import { Trash2, Eye, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ReviewTableProps {
@@ -121,7 +121,7 @@ export function ReviewTable({ reviews, loading, onDelete }: ReviewTableProps) {
       <div className="md:hidden space-y-2">
         {reviews.map((review) => (
           <div key={review.id} className="flex items-center justify-between p-3 rounded-lg bg-surface border border-border">
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
@@ -136,14 +136,16 @@ export function ReviewTable({ reviews, loading, onDelete }: ReviewTableProps) {
                   month: 'short', day: 'numeric',
                 })}
               </span>
+              <p className="text-xs text-[#555555] mt-1.5 line-clamp-2">{review.summary}</p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0">
               <Button variant="ghost" size="icon" className="size-7" onClick={() => setSelectedReview(review)}>
                 <Eye className="size-3.5" />
               </Button>
               <Button variant="ghost" size="icon" className="size-7 text-muted-text hover:text-red-400" onClick={() => onDelete(review.id)}>
                 <Trash2 className="size-3.5" />
               </Button>
+              <ChevronRight className="size-3.5 text-[#3a3a3a]" />
             </div>
           </div>
         ))}

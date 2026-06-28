@@ -66,7 +66,7 @@ export function DemoPreview() {
                   <span className="text-[#a6accd]"> = </span>
                   <span className="text-[#82aaff]">fetch</span>
                   <span className="text-[#a6accd]">(</span>
-                  <span className="text-[#c3e88d]">'/api/users/'</span>
+                   <span className="text-[#c3e88d]">{'/api/users/'}</span>
                   <span className="text-[#a6accd]"> + </span>
                   <span className="text-[#eeffff]">id</span>
                   <span className="text-[#a6accd]">)</span>

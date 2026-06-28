@@ -20,7 +20,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
-            <Toaster position="bottom-right" />
+            <Toaster theme="dark" position="bottom-right" />
           </AuthProvider>
         </ThemeProvider>
       </body>
