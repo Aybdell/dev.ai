@@ -30,3 +30,27 @@ create policy "Users delete own reviews" on public.reviews
   for delete using (auth.uid() = user_id);
 
 create index reviews_user_created on public.reviews(user_id, created_at desc);
+
+-- GitHub connection for code import
+create table public.github_connections (
+  id            uuid primary key default uuid_generate_v4(),
+  user_id       uuid not null references auth.users(id) on delete cascade unique,
+  github_username text not null,
+  access_token  text not null,
+  avatar_url    text,
+  connected_at  timestamptz default now()
+);
+
+alter table public.github_connections enable row level security;
+
+create policy "Users read own connection" on public.github_connections
+  for select using (auth.uid() = user_id);
+
+create policy "Users insert own connection" on public.github_connections
+  for insert with check (auth.uid() = user_id);
+
+create policy "Users update own connection" on public.github_connections
+  for update using (auth.uid() = user_id);
+
+create policy "Users delete own connection" on public.github_connections
+  for delete using (auth.uid() = user_id);
