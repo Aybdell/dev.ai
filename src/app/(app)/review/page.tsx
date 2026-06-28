@@ -8,7 +8,7 @@ import { ResultsPanel } from '@/components/review/results-panel'
 import { AnalysisPipeline } from '@/components/review/analysis-pipeline'
 import { Button } from '@/components/ui/button'
 import { GitHubFilePicker } from '@/components/github/github-file-picker'
-import { Loader2, Sparkles } from 'lucide-react'
+import { ChevronLeft, Loader2, Sparkles } from 'lucide-react'
 import type { Language, Review } from '@/types/review'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ export default function ReviewPage() {
   const [analyzing, setAnalyzing] = useState(false)
   const [review, setReview] = useState<Review | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [mobileView, setMobileView] = useState<'editor' | 'results'>('editor')
   const [githubPickerOpen, setGithubPickerOpen] = useState(false)
   const [githubConnected, setGithubConnected] = useState(false)
   const [supabase] = useState(() => createClient())
@@ -64,6 +65,9 @@ export default function ReviewPage() {
       return
     }
 
+    if (window.innerWidth < 1024) {
+      setMobileView('results')
+    }
     setAnalyzing(true)
     setReview(null)
     setError(null)
@@ -104,8 +108,8 @@ export default function ReviewPage() {
 
   return (
     <div className="h-full flex flex-col lg:flex-row">
-      <div className="flex-1 flex flex-col border-r border-border lg:max-w-[50%]">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <div className={`flex-1 flex-col border-r border-border lg:max-w-[50%] ${mobileView === 'results' ? 'hidden lg:flex' : 'flex'} lg:flex h-[100dvh] lg:h-full`}>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
           <LanguageSelector value={language} onChange={setLanguage} />
           <div className="flex items-center gap-3">
             {githubConnected ? (
@@ -134,11 +138,11 @@ export default function ReviewPage() {
         </div>
 
         <div className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 min-h-[400px]">
+          <div className="flex-1 min-h-[400px]" style={{ height: 'calc(100dvh - 160px)' }}>
             <CodeEditor value={code} onChange={setCode} language={language} />
           </div>
 
-          <div className="p-4 border-t border-border">
+          <div className="lg:relative fixed bottom-0 left-0 right-0 p-4 bg-[#0a0a0a] border-t border-[#2a2a2a] lg:border-border lg:bg-transparent z-10">
             <Button
               className="w-full gap-2"
               onClick={handleAnalyze}
@@ -155,7 +159,17 @@ export default function ReviewPage() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto lg:max-w-[50%]">
+      <div className={`flex-1 overflow-y-auto lg:max-w-[50%] ${mobileView === 'editor' ? 'hidden lg:block' : 'block'} lg:block h-[100dvh] lg:h-full transition-opacity duration-200`}>
+        <div className="lg:hidden flex items-center gap-2 px-6 pt-6 pb-0">
+          <button
+            onClick={() => setMobileView('editor')}
+            className="flex items-center gap-1 text-sm text-[#888888] hover:text-[#f0f0f0] transition-colors"
+          >
+            <ChevronLeft size={16} />
+            Back to editor
+          </button>
+        </div>
+
         {analyzing && (
           <div className="flex items-center justify-center h-full">
             <AnalysisPipeline />
